@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard GudangAzira</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <i class="fa-solid fa-boxes-stacked brand-icon"></i>
+      <span>GudangAzira</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <p class="nav-label">Menu Utama</p>
+      <a href="#" class="nav-link active" data-page="dashboard">
+        <i class="fa-solid fa-gauge-high nav-icon"></i><span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-link" data-page="tambah">
+        <i class="fa-solid fa-plus nav-icon"></i><span>Tambah Barang</span>
+      </a>
+      <a href="#" class="nav-link" data-page="daftar">
+        <i class="fa-solid fa-table-list nav-icon"></i><span>Daftar Barang</span>
+      </a>
+      <a href="#" class="nav-link" data-page="riwayat">
+        <i class="fa-solid fa-clock-rotate-left nav-icon"></i><span>Riwayat Transaksi</span>
+      </a>
+      <a href="#" class="nav-link" data-page="grafik">
+        <i class="fa-solid fa-chart-line nav-icon"></i><span>Laporan &amp; Grafik</span>
+      </a>
+      <a href="#" class="nav-link" id="navUsers" data-page="users">
+        <i class="fa-solid fa-users-gear nav-icon"></i><span>Manajemen Pengguna</span>
+      </a>
+      <!-- Tambahkan di dalam sidebar-nav (setelah Manajemen Pengguna / Daftar Barang) -->
+      <a href="#" class="nav-link" data-page="sampah">
+        <i class="fa-solid fa-trash-arrow-up nav-icon"></i><span>Tempat Sampah</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-capacity">
+        <div class="scap-top"><span>Kapasitas Rak</span><span id="capMiniText">0/1000</span></div>
+        <div class="progress mini"><div class="progress-fill green" id="capMiniFill"></div></div>
+      </div>
+
+      <div class="user-box">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div>
+          <span class="user-name" id="userName">—</span>
+          <span class="user-role" id="userRole">—</span>
+        </div>
+      </div>
+
+      <button class="btn btn-outline-light btn-block" id="btnLogout">
+        <i class="fa-solid fa-right-from-bracket"></i> Keluar
+      </button>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ============ KONTEN UTAMA ============ -->
+  <main class="main-content">
+
+    <header class="topbar">
+      <button class="hamburger" id="btnHamburger" aria-label="Buka menu"><i class="fa-solid fa-bars"></i></button>
+      <h1 class="page-title" id="pageTitle">Dashboard</h1>
+      <div class="topbar-actions">
+        <button class="btn btn-success" id="btnTopMasuk"><i class="fa-solid fa-arrow-down"></i> Stok Masuk</button>
+        <button class="btn btn-danger" id="btnTopKeluar"><i class="fa-solid fa-arrow-up"></i> Stok Keluar</button>
+      </div>
+    </header>
+
+    <!-- ===== HALAMAN: DASHBOARD ===== -->
+    <section class="page active" id="page-dashboard">
+
+      <h3 class="section-title"><i class="fa-solid fa-bolt"></i> Ringkasan Cepat</h3>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="sc-icon blue"><i class="fa-solid fa-box-open"></i></div>
+          <div>
+            <div class="sc-value" id="sumJenis">0</div>
+            <div class="sc-caption">Jenis Barang</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-icon green"><i class="fa-solid fa-cubes-stacked"></i></div>
+          <div>
+            <div class="sc-value" id="sumUnit">0</div>
+            <div class="sc-caption">Total Unit Stok</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-icon orange"><i class="fa-solid fa-money-bill-wave"></i></div>
+          <div>
+            <div class="sc-value" id="sumNilai">Rp 0</div>
+            <div class="sc-caption">Nilai Inventori</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="sc-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+          <div>
+            <div class="sc-value" id="sumMenipis">0</div>
+            <div class="sc-caption">Stok Menipis</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head">
+            <h3><i class="fa-solid fa-warehouse"></i> Kapasitas Rak</h3>
+            <span class="capacity-badge" id="capacityText">0 / 1000 slot digunakan</span>
+          </div>
+          <div class="progress big"><div class="progress-fill green" id="capacityFill"></div></div>
+          <p class="muted small" id="capacityInfo" style="margin-top:10px"></p>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h3><i class="fa-solid fa-bolt"></i> Transaksi Cepat</h3></div>
+          <div class="quick-actions">
+            <button class="btn btn-success btn-lg" id="btnQuickMasuk"><i class="fa-solid fa-arrow-down"></i> Stok Masuk</button>
+            <button class="btn btn-danger btn-lg" id="btnQuickKeluar"><i class="fa-solid fa-arrow-up"></i> Stok Keluar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-boxes-stacked"></i> Daftar Barang Terbaru</h3>
+          <a href="#" class="link" data-goto="daftar">Lihat Semua →</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nama Barang</th><th>Kode</th><th>Kategori</th><th>Stok</th>
+                <th>Harga</th><th>Diperbarui</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyLatest"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HALAMAN: TAMBAH BARANG ===== -->
+    <section class="page" id="page-tambah">
+      <div class="card" style="max-width:760px">
+        <div class="card-head"><h3><i class="fa-solid fa-plus"></i> Tambah Barang Baru</h3></div>
+        <form id="formTambah" autocomplete="off">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tbNama">Nama Barang <span class="req">*</span></label>
+              <input type="text" id="tbNama" placeholder="cth: Macbook Pro M2" required>
+            </div>
+            <div class="form-group">
+              <label for="tbKategori">Kategori <span class="req">*</span></label>
+              <select id="tbKategori" required>
+                <option value="">— Pilih Kategori —</option>
+                <option>Laptop</option>
+                <option>Smartphone</option>
+                <option>Tablet</option>
+                <option>TV</option>
+                <option>Audio</option>
+                <option>Kamera</option>
+                <option>Aksesoris</option>
+                <option>Lainnya</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Kode Unik Barang <span class="req">*</span></label>
+            <div class="kode-generator">
+              <input type="text" id="tbKode" readonly placeholder="Otomatis setelah pilih kategori" required>
+              <button type="button" class="btn btn-light" id="btnAcakKode" title="Acak ulang kode">
+                <i class="fa-solid fa-dice"></i>
+              </button>
+            </div>
+            <small class="muted small">Kode dibuat otomatis dari kategori — klik dadu untuk acak ulang.</small>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tbStok">Jumlah Stok Awal</label>
+              <input type="number" id="tbStok" min="0" value="0" required>
+            </div>
+            <div class="form-group">
+              <label for="tbHarga">Harga Satuan (Rp) <span class="req">*</span></label>
+              <input type="number" id="tbHarga" min="0" step="1000" placeholder="cth: 1500000" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tbMin">Stok Minimum (Batas Peringatan)</label>
+              <input type="number" id="tbMin" min="0" value="5" required>
+            </div>
+            <div class="form-group">
+              <label for="tbLokasi">Lokasi Rak</label>
+              <input type="text" id="tbLokasi" placeholder="cth: Rak A-01">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="tbKet">Keterangan</label>
+            <textarea id="tbKet" rows="2" placeholder="Opsional — cth: garansi resmi 1 tahun"></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="reset" class="btn btn-light"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Barang</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== HALAMAN: DAFTAR BARANG ===== -->
+    <section class="page" id="page-daftar">
+      <div class="card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-table-list"></i> Daftar Barang</h3>
+          <div class="filter-bar">
+            <input type="text" id="searchBarang" class="input" placeholder="🔍 Cari nama / kode / ID...">
+            <select id="filterKategori" class="input">
+              <option value="">Semua Kategori</option>
+            </select>
+            <button class="btn btn-light" id="btnExportBarang" title="Export ke CSV">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Kode</th><th>Nama Barang</th><th>Kategori</th><th>Stok</th>
+                <th>Harga</th><th>Lokasi</th><th>Status</th><th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyItems"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HALAMAN: RIWAYAT ===== -->
+    <section class="page" id="page-riwayat">
+      <div class="card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Transaksi</h3>
+          <div class="filter-bar">
+            <select id="filterTrx" class="input">
+              <option value="">Semua Transaksi</option>
+              <option value="masuk">Hanya Stok Masuk</option>
+              <option value="keluar">Hanya Stok Keluar</option>
+            </select>
+            <select id="filterPetugas" class="input">
+              <option value="">Semua Petugas</option>
+            </select>
+            <button class="btn btn-light" id="btnExportTrx" title="Export ke CSV">
+              <i class="fa-solid fa-file-csv"></i> CSV
+            </button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th><th>Tanggal</th><th>Jenis</th><th>Kode</th><th>Barang</th>
+                <th>Jumlah</th><th>Keterangan</th><th>Petugas</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyTrx"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HALAMAN: TEMPAT SAMPAH ===== -->
+<section class="page" id="page-sampah">
+  <div class="card">
+    <div class="card-head">
+      <h3><i class="fa-solid fa-trash-arrow-up"></i> Tempat Sampah (Arsip Barang Terhapus)</h3>
+      <button class="btn btn-danger" id="btnKosongkanSampah">
+        <i class="fa-solid fa-trash"></i> Kosongkan Permanen
+      </button>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Kode</th><th>Nama Barang</th><th>Kategori</th><th>Stok Terakhir</th>
+            <th>Harga</th><th>Dihapus Pada</th><th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tbodySampah"></tbody>
+      </table>
+    </div>
+    <p class="muted small" style="margin-top:12px">
+      <i class="fa-solid fa-circle-info"></i> Barang yang dihapus dari daftar utama akan masuk ke sini. Anda dapat memulihkannya kembali kapan saja.
+    </p>
+  </div>
+</section>
+
+    <!-- ===== HALAMAN: LAPORAN & GRAFIK ===== -->
+    <section class="page" id="page-grafik">
+
+      <div class="grafik-head">
+        <h3 class="section-title"><i class="fa-solid fa-chart-line"></i> Laporan &amp; Grafik</h3>
+        <button class="btn btn-primary" id="btnExportLaporan">
+          <i class="fa-solid fa-file-csv"></i> Export Laporan Lengkap
+        </button>
+      </div>
+
+      <p class="muted small hidden" id="chartOffline">
+        <i class="fa-solid fa-wifi"></i> Grafik memerlukan koneksi internet untuk memuat Chart.js CDN.
+      </p>
+
+      <div class="card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-chart-line"></i> Tren Stok Barang</h3>
+          <select id="chartBarang" class="input"></select>
+        </div>
+        <div class="chart-box"><canvas id="chartTren"></canvas></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3><i class="fa-solid fa-chart-column"></i> Transaksi 14 Hari Terakhir</h3></div>
+          <div class="chart-box"><canvas id="chartHarian"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3><i class="fa-solid fa-chart-pie"></i> Komposisi Stok per Kategori</h3></div>
+          <div class="chart-box"><canvas id="chartKategori"></canvas></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== HALAMAN: MANAJEMEN PENGGUNA (ADMIN) ===== -->
+    <section class="page" id="page-users">
+      <div class="card">
+        <div class="card-head">
+          <h3><i class="fa-solid fa-users-gear"></i> Manajemen Pengguna</h3>
+          <button class="btn btn-primary" id="btnTambahUser">
+            <i class="fa-solid fa-user-plus"></i> Tambah User
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr><th>Nama</th><th>Username</th><th>Role</th><th>Terdaftar</th><th>Aksi</th></tr>
+            </thead>
+            <tbody id="tbodyUsers"></tbody>
+          </table>
+        </div>
+        <p class="muted small" style="margin-top:12px">
+          <i class="fa-solid fa-shield-halved"></i> Akun utama <code>admin</code> dan akun Anda sendiri tidak dapat dihapus.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ MODAL: STOK MASUK / KELUAR ============ -->
+  <div class="modal-overlay" id="modalStok">
+    <div class="modal">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-arrow-down" id="modalStokIcon"></i> <span id="modalStokTitle">Stok Masuk</span></h3>
+        <button type="button" class="modal-close" data-close="modalStok"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formStok">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="stokBarang">Pilih Barang <span class="req">*</span></label>
+            <select id="stokBarang" required></select>
+          </div>
+          <div class="stok-info" id="stokInfo">Stok saat ini: —</div>
+          <div class="form-group">
+            <label for="stokJumlah">Jumlah <span class="req">*</span></label>
+            <input type="number" id="stokJumlah" min="1" value="1" required>
+          </div>
+          <div class="form-group">
+            <label for="stokKet">Keterangan</label>
+            <input type="text" id="stokKet" placeholder="cth: Restock dari distributor">
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-light" data-close="modalStok">Batal</button>
+          <button type="submit" class="btn btn-success" id="btnSubmitStok">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: EDIT ============ -->
+  <div class="modal-overlay" id="modalEdit">
+    <div class="modal">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-pen"></i> Edit Barang</h3>
+        <button type="button" class="modal-close" data-close="modalEdit"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formEdit">
+        <div class="modal-body">
+          <div class="stok-info" id="editKodeShow"><i class="fa-solid fa-barcode"></i> —</div>
+          <div class="form-group">
+            <label for="editNama">Nama Barang</label>
+            <input type="text" id="editNama" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editKategori">Kategori</label>
+              <select id="editKategori" required>
+                <option>Laptop</option><option>Smartphone</option><option>Tablet</option>
+                <option>TV</option><option>Audio</option><option>Kamera</option>
+                <option>Aksesoris</option><option>Lainnya</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="editHarga">Harga Satuan (Rp)</label>
+              <input type="number" id="editHarga" min="0" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="editMin">Stok Minimum</label>
+              <input type="number" id="editMin" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="editLokasi">Lokasi Rak</label>
+              <input type="text" id="editLokasi">
+            </div>
+          </div>
+          <p class="muted small"><i class="fa-solid fa-circle-info"></i> Perubahan jumlah stok dilakukan lewat menu Stok Masuk / Stok Keluar agar tercatat di riwayat.</p>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-light" data-close="modalEdit">Batal</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: HAPUS ============ -->
+  <div class="modal-overlay" id="modalHapus">
+    <div class="modal modal-sm">
+      <div class="modal-head">
+        <h3><i id="hapusIcon" class="fa-solid fa-trash-can"></i> Konfirmasi Hapus</h3>
+        <button type="button" class="modal-close" data-close="modalHapus"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="modal-body">
+        <p>Yakin ingin menghapus <strong id="hapusNama"></strong>?</p>
+        <p class="muted small" style="margin-top:6px">Tindakan ini tidak dapat dibatalkan.</p>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="btn btn-light" data-close="modalHapus">Batal</button>
+        <button type="button" class="btn btn-danger" id="btnConfirmHapus"><i class="fa-solid fa-trash-can"></i> Hapus</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: TAMBAH USER (ADMIN) ============ -->
+  <div class="modal-overlay" id="modalUser">
+    <div class="modal">
+      <div class="modal-head">
+        <h3><i class="fa-solid fa-user-plus"></i> Tambah Pengguna</h3>
+        <button type="button" class="modal-close" data-close="modalUser"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="formUser">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="uNama">Nama Lengkap <span class="req">*</span></label>
+            <input type="text" id="uNama" placeholder="cth: Siti Aminah" required>
+          </div>
+          <div class="form-group">
+            <label for="uUser">Username <span class="req">*</span></label>
+            <input type="text" id="uUser" placeholder="3-20 karakter (huruf/angka/_)" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="uPass">Password <span class="req">*</span></label>
+              <input type="password" id="uPass" placeholder="Min. 6 karakter" required>
+            </div>
+            <div class="form-group">
+              <label for="uRole">Role</label>
+              <select id="uRole">
+                <option value="staff">Staff Gudang</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn btn-light" data-close="modalUser">Batal</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

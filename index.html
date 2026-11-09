@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Masuk GudangAzira</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>">
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="login-body">
+
+  <div class="login-card">
+    <div class="login-head">
+      <div class="logo-besar"><i class="fa-solid fa-warehouse"></i></div>
+      <h1>GudangAzira</h1>
+      <p>Sistem Manajemen Inventori Toko Elektronik</p>
+    </div>
+
+    <!-- Tab Login / Daftar -->
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-tab="login">
+        <i class="fa-solid fa-right-to-bracket"></i> Masuk
+      </button>
+      <button type="button" class="auth-tab" data-tab="register">
+        <i class="fa-solid fa-user-plus"></i> Daftar
+      </button>
+    </div>
+
+    <!-- ===== FORM LOGIN ===== -->
+    <form id="loginForm" class="auth-pane active" autocomplete="off">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-user"></i>
+          <input type="text" id="username" placeholder="Masukkan username" required autofocus>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-lock"></i>
+          <input type="password" id="password" placeholder="Masukkan password" required>
+          <button type="button" class="toggle-btn" id="togglePassword" aria-label="Lihat password">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="login-error" id="loginError" hidden></div>
+
+      <button type="submit" class="btn btn-primary btn-block">
+        <i class="fa-solid fa-right-to-bracket"></i> Masuk
+      </button>
+    </form>
+
+    <!-- ===== FORM REGISTRASI ===== -->
+    <form id="registerForm" class="auth-pane" autocomplete="off">
+      <div class="form-group">
+        <label for="regNama">Nama Lengkap <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-id-card"></i>
+          <input type="text" id="regNama" placeholder="cth: Budi Santoso" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regUser">Username <span class="req">*</span></label>
+        <div class="input-wrapper">
+          <i class="fa-solid fa-at"></i>
+          <input type="text" id="regUser" placeholder="3-20 karakter (huruf/angka/_)" required>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="regPass">Password <span class="req">*</span></label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="regPass" placeholder="Min. 6 karakter" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="regPass2">Konfirmasi <span class="req">*</span></label>
+          <div class="input-wrapper">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" id="regPass2" placeholder="Ulangi password" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="regRole">Daftar Sebagai</label>
+        <select id="regRole" required>
+          <option value="staff">Staff Gudang</option>
+          <option value="admin">Administrator</option>
+        </select>
+      </div>
+
+      <div class="login-error" id="regError" hidden></div>
+      <div class="login-success" id="regSuccess" hidden></div>
+
+      <button type="submit" class="btn btn-success btn-block">
+        <i class="fa-solid fa-user-plus"></i> Buat Akun
+      </button>
+    </form>
+
+    <div class="login-hint">
+      <p><strong>Akun demo:</strong></p>
+      <code>admin / admin123</code> <code>gudang / gudang123</code>
+      <p class="small" style="margin-top:6px">Belum punya akun? Klik tab <strong>Daftar</strong> untuk registrasi.</p>
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
